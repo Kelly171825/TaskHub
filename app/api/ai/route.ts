@@ -1,0 +1,3 @@
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+export async function POST(request: NextRequest) { const { prompt } = await request.json(); if (!process.env.OPENAI_API_KEY) return NextResponse.json({ suggestion: "Configure OPENAI_API_KEY para ativar o assistente. Estrutura pronta para gerar prioridades, resumos e tarefas." }); const client=new OpenAI({apiKey:process.env.OPENAI_API_KEY}); const completion=await client.chat.completions.create({model:"gpt-4o-mini",messages:[{role:"system",content:"Você é o assistente TaskHub. Responda em português, de forma objetiva."},{role:"user",content:prompt}]}); return NextResponse.json({suggestion:completion.choices[0].message.content}); }
